@@ -6,6 +6,9 @@ import 'package:sharebao/pages/list_page.dart';
 import 'package:sharebao/pages/overview_page.dart';
 import 'package:sharebao/components/bottom_nav_bar.dart';
 
+import 'add_item_page.dart';
+
+// Handles all the navigation
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -38,19 +41,35 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      // 'add' button
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   backgroundColor: const Color.fromARGB(255, 187, 110, 201),
-      //   child: Text(
-      //     '+',
-      //     style: TextStyle(fontSize: 30),
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      bottomNavigationBar: MyBottomNavBar(
-        onTabChange: (index) => navigateBottomBar(index),
+      // Remove: button for testing add function
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // go to Add page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddItemPage(type: 'Income'),
+            ),
+          );
+        },
+        backgroundColor: const Color.fromARGB(255, 187, 110, 201),
+        child: Text(
+          '+',
+          style: TextStyle(fontSize: 30),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 50,
+              color: Colors.black.withOpacity(.16),
+            )
+          ],
+        ),
+        child: MyBottomNavBar(
+          onTabChange: (index) => navigateBottomBar(index),
+        ),
       ),
       body: _pages[_selectedIndex],
     );

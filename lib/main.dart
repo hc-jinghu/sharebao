@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sharebao/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:sharebao/models/finance_list.dart';
+import 'pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+    return ChangeNotifierProvider(
+      create: (context) => FinanceList(),
+      builder: (context, child) => const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+      ),
     );
   }
 }

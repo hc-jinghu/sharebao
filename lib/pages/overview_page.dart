@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sharebao/const.dart';
-import 'package:sharebao/util/goal_widget.dart';
+import 'package:sharebao/components/goal_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OverviewPage extends StatefulWidget {
