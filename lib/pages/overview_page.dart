@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sharebao/const.dart';
-import 'package:sharebao/components/goal_widget.dart';
+import 'package:sharebao/components/goal_overview.dart';
+import 'package:sharebao/pages/settings_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -20,7 +22,9 @@ class _OverviewPageState extends State<OverviewPage> {
       backgroundColor: backgroundColor,
       body: CustomScrollView(
         slivers: [
-          // sliver app bar. TODO: Add function to replace background with photo.
+          // sliver app bar.
+          // TODO: Add function to replace background with photo.
+          // TODO: Add Settings button
           SliverAppBar(
             backgroundColor: Colors.purple,
             expandedHeight: 200,
@@ -28,10 +32,38 @@ class _OverviewPageState extends State<OverviewPage> {
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
               background: ColoredBox(color: Colors.purple),
-              title: Text('ShareBao'),
+              title: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsPage(),
+                    ),
+                  );
+                },
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 10,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('ShareBao'),
+                      ],
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                      },
+                      height: 10,
+                      color: Colors.deepPurple,
+                      child: Text('Sign Out'),
+                    )
+                  ],
+                ),
+              ),
             ),
-            // TODO: Add Settings button
-            //actions: [],
           ),
           // sliver items
           // Monthly Summary. Summary widget for couple spending.

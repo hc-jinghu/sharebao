@@ -8,7 +8,7 @@ import 'package:sharebao/components/bottom_nav_bar.dart';
 
 import 'add_item_page.dart';
 
-// Handles all the navigation
+// Houses navigation bar, handles page navigation after login
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

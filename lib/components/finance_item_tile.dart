@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sharebao/models/finance_item.dart';
 
 class FinanceListTile extends StatelessWidget {
-  final FinanceItem item;
-  FinanceListTile({super.key, required this.item});
+  final Map<String, dynamic> item;
+  const FinanceListTile({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +14,8 @@ class FinanceListTile extends StatelessWidget {
         ),
       ),
       // tileColor: Colors.pink,
-      title: Text(item.desc),
-      subtitle: Text(item.dateMonth + '/' + item.dateDay),
+      title: Text(item['desc']),
+      subtitle: Text('${item['dateMonth']}/${item['dateDay']}'),
       leading: Wrap(
         direction: Axis.horizontal,
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -31,16 +30,16 @@ class FinanceListTile extends StatelessWidget {
             direction: Axis.vertical,
             children: [
               Text(
-                'Category',
+                item['category'],
                 style: TextStyle(fontSize: 16),
               ),
-              Text('Split')
+              Text(item['split'].toString())
             ],
           ),
         ],
       ),
       trailing: Text(
-        '\$' + item.amount.toString(),
+        '\$${item['amount']}',
         style: TextStyle(fontSize: 18),
       ),
     );

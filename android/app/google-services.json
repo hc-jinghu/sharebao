@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "616164817364",
+    "project_id": "sharebao-17480",
+    "storage_bucket": "sharebao-17480.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616164817364:android:d6300621219e65ae7efe41",
+        "android_client_info": {
+          "package_name": "com.example.sharebao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "616164817364-0g8u1nq8n5civup4itqllpb6ablp2qsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3x3gn4q9bbygf_rwL-4dziFE-ZAmmny0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "616164817364-0g8u1nq8n5civup4itqllpb6ablp2qsc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "616164817364-g0di43co4cuef8umds4t1rumaici4ckk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sharebao"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sharebao/models/finance_list.dart';
-import 'pages/home_page.dart';
+import 'package:sharebao/pages/main_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -12,12 +13,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FinanceList(),
-      builder: (context, child) => const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: HomePage(),
-      ),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainPage(),
     );
   }
 }

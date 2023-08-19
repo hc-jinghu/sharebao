@@ -1,133 +1,26 @@
-import 'package:flutter/material.dart';
-import 'finance_item.dart';
+// Delete this file later, already replaced by firebase
+// this is just a place to store this weekday conversion function
 
-class FinanceList extends ChangeNotifier {
-  // finance item to show
-  // TODO: use Firebase for backend later
-  // example data
-  final List<FinanceItem> _list = [
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '11',
-        desc: 'steak dinner',
-        amount: 20,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-    FinanceItem(
-        dateMonth: '8',
-        dateDay: '6',
-        desc: 'plane ticket',
-        amount: 3000,
-        type: 'Expense'),
-  ];
-
-  // get financeList
-  List<FinanceItem> get financeList => _list;
-
-  // add financeItem to financeList
-  void addItemToList(FinanceItem item) {
-    _list.add(item);
-    notifyListeners();
-  }
-
-  // remove financeItem to financeList
-  void removeItemFromList(FinanceItem item) {
-    _list.remove(item);
-    notifyListeners();
+class FinanceList {
+  // get weekday from a dateTime object
+  String getDayName(DateTime dateTime) {
+    switch (dateTime.weekday) {
+      case 1:
+        return 'Mon';
+      case 2:
+        return 'Tue';
+      case 3:
+        return 'Wed';
+      case 4:
+        return 'Thu';
+      case 5:
+        return 'Fri';
+      case 6:
+        return 'Sat';
+      case 7:
+        return 'Sun';
+      default:
+        return '';
+    }
   }
 }
