@@ -13,6 +13,14 @@ class User {
     this.splitPayment = const {},
   });
 
+  toJson() {
+    return {
+      "name": name,
+      "tempPayment": tempPayment,
+      "splitPayment": splitPayment,
+    };
+  }
+
   // get total temp payment
   double getTotalTemp() {
     var values = tempPayment.values;

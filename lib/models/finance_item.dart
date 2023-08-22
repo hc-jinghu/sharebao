@@ -1,8 +1,9 @@
-// Properties of a finance item in a finance list
+// Properties of a finance item
 class FinanceItem {
   final List<String> participants;
 
   // date of transaction
+  final int dateYear;
   final int dateMonth;
   final int dateDay;
 
@@ -23,6 +24,7 @@ class FinanceItem {
     required this.participants,
     required this.dateMonth,
     required this.dateDay,
+    required this.dateYear,
     required this.desc,
     required this.amount,
     required this.type,
@@ -69,28 +71,6 @@ class FinanceItem {
       if (newUser != user) {
         participants.add(newUser);
       }
-    }
-  }
-
-  // get weekday from a dateTime object
-  String getDayName(DateTime dateTime) {
-    switch (dateTime.weekday) {
-      case 1:
-        return 'Mon';
-      case 2:
-        return 'Tue';
-      case 3:
-        return 'Wed';
-      case 4:
-        return 'Thu';
-      case 5:
-        return 'Fri';
-      case 6:
-        return 'Sat';
-      case 7:
-        return 'Sun';
-      default:
-        return '';
     }
   }
 }
