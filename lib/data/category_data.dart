@@ -53,7 +53,7 @@ Future updateCategory(String name, String type) async {
 }
 
 // delete category
-Future deleteCategory(String name, String type) async {
+Future deleteCategory(String name) async {
   await db.collection('categories').doc('category').update({
     name: FieldValue.delete(),
   });
