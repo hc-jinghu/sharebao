@@ -1,6 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sharebao/const.dart';
 import 'package:sharebao/components/finance_item_tile.dart';
+import 'package:sharebao/data/finance_data.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -10,19 +12,24 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  // document id
-  List<String> financeListId = [];
-
-  // get financeList document id
-  Future getFinanceListId() async {
-    financeListId.clear();
-    await FirebaseFirestore.instance.collection('financeList').get().then(
-          (snapshot) => snapshot.docs.forEach(
-            (document) {
-              financeListId.add(document.reference.id);
-            },
-          ),
-        );
+  // Month picker
+  DateTime date = DateTime.now();
+  void _showMonthDialog(Widget child) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Container(
+        height: 200,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: child,
+        ),
+      ),
+    );
   }
 
   @override
@@ -30,15 +37,34 @@ class _ListPageState extends State<ListPage> {
     return SafeArea(
       child: Column(
         children: [
-          // TODO: add dateMonth variable (button to change displayed month)
-          // It needs to behave like an AppBar, stays on top while scrolling
-          Text(
-            'Month',
-            style: TextStyle(fontSize: 20),
-          ),
-
-          const SizedBox(
-            height: 10,
+          // app bar. Month button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.black38),
+                  ),
+                ),
+                child: CupertinoButton(
+                  onPressed: () => _showMonthDialog(
+                    CupertinoDatePicker(
+                      initialDateTime: date,
+                      maximumYear: DateTime.now().year,
+                      mode: CupertinoDatePickerMode.monthYear,
+                      onDateTimeChanged: (DateTime newDate) {
+                        setState(() => date = newDate);
+                      },
+                    ),
+                  ),
+                  child: Text(
+                    monthEng(date.month),
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ],
           ),
           // TODO: add Filter and Settle
 
@@ -46,39 +72,24 @@ class _ListPageState extends State<ListPage> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(
-                top: 5,
                 left: 5,
                 right: 5,
               ),
 
-              // Build finance list tiles
+              // Build monthly finance list tiles
               child: FutureBuilder(
-                future: getFinanceListId(),
+                future: getfinanceItemWithMonth(date.year, date.month),
                 builder: (context, snapshot) {
                   return ListView.builder(
-                    itemCount: financeListId.length,
+                    itemCount: financeItemWithMonth.length,
                     itemBuilder: (context, index) {
-                      return FutureBuilder<DocumentSnapshot>(
-                        future: FirebaseFirestore.instance
-                            .collection('financeList')
-                            .doc(financeListId[index])
-                            .get(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            Map<String, dynamic> financeItem =
-                                snapshot.data!.data() as Map<String, dynamic>;
-                            return FinanceListTile(item: financeItem);
-                          }
-                          return Text('...');
-                        },
-                      );
+                      return FinanceListTile(item: monthlyFinanceItem);
                     },
                   );
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );
