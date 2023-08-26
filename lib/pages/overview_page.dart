@@ -69,12 +69,12 @@ class _OverviewPageState extends State<OverviewPage> {
           // Monthly Summary. Summary widget for couple spending.
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  padding: EdgeInsets.all(15),
-                  height: 150,
+                  padding: const EdgeInsets.all(15),
+                  height: 180,
                   color: Colors.grey[100],
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -17,7 +17,7 @@ class FinanceItem {
   // type of transaction (income or expense)
   final String type;
 
-  final String category;
+  final String? category;
   final String currency;
 
   FinanceItem({
@@ -40,6 +40,7 @@ class FinanceItem {
       "participants": participants,
       "dateMonth": dateMonth,
       "dateDay": dateDay,
+      "dateYear": dateYear,
       "type": type,
       "category": category,
       "desc": desc,

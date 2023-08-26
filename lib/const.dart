@@ -6,7 +6,7 @@ var db = FirebaseFirestore.instance;
 // default background color for the app
 var backgroundColor = Colors.grey[300];
 
-// Border color for Split option
+// default border color
 var borderColor = Colors.grey;
 
 // split options
@@ -42,6 +42,6 @@ String monthEng(int month) {
     case 12:
       return "December";
     default:
-      return "";
+      return "-";
   }
 }

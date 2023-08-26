@@ -20,16 +20,4 @@ class User {
       "splitPayment": splitPayment,
     };
   }
-
-  // get total temp payment
-  double getTotalTemp() {
-    var values = tempPayment.values;
-    return values.fold(0.0, (sum, value) => sum + value);
-  }
-
-  // get total split payment
-  double getTotalSplit() {
-    var values = splitPayment.values;
-    return values.fold(0.0, (sum, value) => sum + value);
-  }
 }

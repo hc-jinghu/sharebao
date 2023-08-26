@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sharebao/const.dart';
+import 'package:sharebao/data/category_data.dart';
+import 'package:sharebao/data/joint_goal_data.dart';
 import 'package:sharebao/pages/activity_page.dart';
 import 'package:sharebao/pages/goal_page.dart';
 import 'package:sharebao/pages/list_page.dart';
@@ -37,6 +39,15 @@ class _HomePageState extends State<HomePage> {
     GoalPage()
   ];
 
+  // Load necessary data
+  @override
+  void initState() {
+    getCategories();
+    getBudgetGoal();
+    getProjectGoal();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddItemPage(type: 'Income'),
+              builder: (context) => AddItemPage(),
             ),
           );
         },

@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final newEmailController = TextEditingController();
   final newPasswordController = TextEditingController();
 
-  // save financeItem
+  // Email password authentication
   Future login() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(

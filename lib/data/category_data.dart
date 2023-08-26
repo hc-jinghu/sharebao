@@ -3,6 +3,9 @@ import 'package:sharebao/const.dart';
 
 // category data for db
 
+// types
+final List<String> types = ["Expense", "Income"];
+
 // add category
 Future addCategory(String name, String type) async {
   await db.collection('categories').doc('category').set(
@@ -14,7 +17,7 @@ Future addCategory(String name, String type) async {
 // get categories
 Map<String, dynamic> categories = {};
 Future getCategories() async {
-  await db.collection('categories').doc('category').get().then(
+  db.collection('categories').doc('category').get().then(
     (snapshot) {
       categories = snapshot.data() as Map<String, dynamic>;
     },
@@ -22,24 +25,26 @@ Future getCategories() async {
 }
 
 // get income types
-Map<String, dynamic> incomeCategories = {};
-void getIncomeTypes(Map<String, dynamic> categories) {
+List<String> incomeCategories = [];
+void getIncomeCategories(Map<String, dynamic> categories) {
+  incomeCategories.clear();
   categories.forEach(
     (key, value) {
-      if (value == "Income") {
-        incomeCategories.addAll({key: value});
+      if (value == types.last) {
+        incomeCategories.add(key);
       }
     },
   );
 }
 
 // get expense types
-Map<String, dynamic> expenseCategories = {};
-void getExpenseTypes(Map<String, dynamic> categories) {
+List<String> expenseCategories = [];
+void getExpenseCategories(Map<String, dynamic> categories) {
+  expenseCategories.clear();
   categories.forEach(
     (key, value) {
-      if (value == "Income") {
-        incomeCategories.addAll({key: value});
+      if (value == types.first) {
+        expenseCategories.add(key);
       }
     },
   );
