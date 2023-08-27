@@ -12,12 +12,12 @@ class FinanceItem {
 
   // AA, %, exact amount, no split
   final String splitOption;
-  final bool isTempPay;
 
   // type of transaction (income or expense)
   final String type;
 
   final String? category;
+  String? goal;
   final String currency;
 
   FinanceItem({
@@ -29,9 +29,9 @@ class FinanceItem {
     required this.amount,
     required this.type,
     required this.category,
+    this.goal = '-',
     required this.currency,
     required this.splitOption,
-    this.isTempPay = false,
   });
 
   // convert data for database
@@ -43,11 +43,11 @@ class FinanceItem {
       "dateYear": dateYear,
       "type": type,
       "category": category,
+      "goal": goal,
       "desc": desc,
       "currency": currency,
       "amount": amount,
       "splitOption": splitOption,
-      "isTempPay": isTempPay,
     };
   }
 

@@ -9,6 +9,9 @@ var backgroundColor = Colors.grey[300];
 // default border color
 var borderColor = Colors.grey;
 
+// default font size
+const defaultStyle = TextStyle(fontSize: 16);
+
 // split options
 enum SplitOptions { equal, percent, exact, none }
 
