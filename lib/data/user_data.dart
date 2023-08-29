@@ -78,15 +78,15 @@ Future updateUserName(String userId, String newName) async {
 
 // update temp payment of user
 Future updateTempPayment(
-    String userId, String recordId, String newAmount) async {
+    String userId, String recordId, double newAmount) async {
   await db.collection('users').doc(userId).update(
     {"tempPayment.$recordId": newAmount},
   );
 }
 
 // update split payment of user
-Future splitTempPayment(
-    String userId, String recordId, String newAmount) async {
+Future updateSplitPayment(
+    String userId, String recordId, double newAmount) async {
   await db.collection('users').doc(userId).update(
     {"splitPayment.$recordId": newAmount},
   );

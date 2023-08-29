@@ -12,8 +12,8 @@ Initialize financeItem id (empty document), set currId to newId after
   user split/temp has been updated.
 */
 String currId = ref.doc().id;
-String generateNewId() {
-  return ref.doc().id;
+String generateNewId(String currId) {
+  return (currId = ref.doc().id);
 }
 
 Future addItem(
@@ -41,7 +41,6 @@ Future addItem(
           goal: goal,
           currency: currency)
       .toJson());
-  generateNewId();
 }
 
 // get data from financeList
@@ -61,11 +60,14 @@ Future getFinanceListId() async {
 /*
 // get financeItems with provided dateMonth
 @Input: int dateMonth
-@Output: DocumentSnapshot. documents with matching dateMonth
+@Output:
+  List<docId>
+  List<Map<docId, docsnapshot>>
  */
-List<QueryDocumentSnapshot> financeItemWithMonth = [];
-Map<String, dynamic> monthlyFinanceItem = {};
+List<String> recordId = [];
+List<Map<String, dynamic>> financeItemWithMonth = [];
 Future getfinanceItemWithMonth(int dateYear, int dateMonth) async {
+  recordId.clear();
   financeItemWithMonth.clear();
   await ref
       .where('dateYear', isEqualTo: dateYear)
@@ -73,10 +75,10 @@ Future getfinanceItemWithMonth(int dateYear, int dateMonth) async {
       .get()
       .then((querySnapshot) {
     for (var docSnapshot in querySnapshot.docs) {
-      financeItemWithMonth.add(docSnapshot);
-    }
-    for (var element in financeItemWithMonth) {
-      monthlyFinanceItem = element.data() as Map<String, dynamic>;
+      recordId.add(docSnapshot.reference.id);
+      financeItemWithMonth.add({
+        docSnapshot.reference.id: docSnapshot.data()! as Map<String, dynamic>
+      });
     }
   }, onError: (e) => print("Error getting finance item with month $dateMonth"));
 }
@@ -104,3 +106,5 @@ Future getFinanceItem() async {}
 // }
 
 // delete item from db
+// delete from financeList
+// delete from users split & temp

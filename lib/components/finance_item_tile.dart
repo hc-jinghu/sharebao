@@ -43,7 +43,7 @@ class FinanceListTile extends StatelessWidget {
                   item['category'],
                   style: TextStyle(fontSize: 16),
                 ),
-                Text(item['split'].toString())
+                Text(item['splitOption'].toString().split('.').last)
               ],
             ),
           ],

@@ -21,8 +21,32 @@ class _AddItemPageState extends State<AddItemPage> {
   // controllers
   final newItemAmountController = TextEditingController();
   final newItemDescController = TextEditingController();
-  final splitAmountController = TextEditingController();
-  final splitScrollController = ScrollController();
+  final _splitScrollController = ScrollController();
+  final _tempScrollController = ScrollController();
+
+  List<TextEditingController> splitAmountControllers = [];
+  void generateNewSplitControllers(int users) {
+    splitAmountControllers.clear();
+    for (var i = 0; i < users; i++) {
+      splitAmountControllers.add(TextEditingController());
+      splitAmountControllers[i].text = '0';
+    }
+  }
+
+  List<TextEditingController> tempAmountControllers = [];
+  void generateNewTempControllers(int users) {
+    tempAmountControllers.clear();
+    for (var i = 0; i < users; i++) {
+      tempAmountControllers.add(TextEditingController());
+      tempAmountControllers[i].text = '0';
+    }
+  }
+
+  // Calculate split amount based on splitOptions
+  /*
+  if splitoption.percent, double.parse(amount*splitcontroller.text)
+  if splitoption.exact, double.parse(splitcontroller.text)
+   */
 
   // Types options
   String selectedType = types.first;
@@ -34,7 +58,7 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
-  // Category drop down variable
+  // Category dropdown
   String? selectedCategory = "";
   List<String> categoryList() {
     if (isExpense()) {
@@ -48,7 +72,7 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
-  // Project/Budget goal
+  // Project/Budget goal dropdown
   String? selectedGoal = "";
   List<String> goalList = [];
   String goalType() {
@@ -80,13 +104,130 @@ class _AddItemPageState extends State<AddItemPage> {
           ],
         );
       default:
-        return const SizedBox(height: 20);
+        return const SizedBox(height: 10);
     }
   }
 
-// TODO: delete test data
-  List<String> test = ['1', '2', '3'];
-  List colors = [Colors.yellow, Colors.orange, Colors.blue];
+  // Split pay
+  Widget _splitPayWidget() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      width: 310,
+      height: 110,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: const Color.fromARGB(255, 229, 219, 240),
+      ),
+      child: userIds.isNotEmpty
+          ? MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              removeBottom: true,
+              child: Scrollbar(
+                controller: _splitScrollController,
+                thumbVisibility: true,
+                child: ListView.builder(
+                  primary: false,
+                  controller: _splitScrollController,
+                  itemCount: userIds.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            getUserName(userIds[index]),
+                            style: defaultStyle,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 30,
+                            child: TextField(
+                              style: const TextStyle(fontSize: 13),
+                              decoration: const InputDecoration(hintText: '0'),
+                              controller: splitAmountControllers[index],
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            )
+          : const Center(child: Text("don't split with yourself :p")),
+    );
+  }
+
+  // Temp pay
+  bool isTempPay = false;
+  Widget _tempPayWidget(bool isTempPay) {
+    return isTempPay
+        ? Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            width: 310,
+            height: 110,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: const Color.fromARGB(255, 229, 219, 240),
+            ),
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              removeBottom: true,
+              child: Scrollbar(
+                controller: _tempScrollController,
+                thumbVisibility: true,
+                child: ListView.builder(
+                  primary: false,
+                  controller: _tempScrollController,
+                  itemCount: userIds.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            getUserName(userIds[index]),
+                            style: defaultStyle,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 30,
+                            child: TextField(
+                              style: const TextStyle(fontSize: 13),
+                              decoration: const InputDecoration(hintText: '0'),
+                              controller: tempAmountControllers[index],
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          )
+        : const SizedBox(height: 10);
+  }
 
   // Date picker
   DateTime date = DateTime.now();
@@ -111,7 +252,6 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   // Action button: save
-  // TODO: delete example data
   Future add() async {
     addItem(
       userIds,
@@ -128,6 +268,16 @@ class _AddItemPageState extends State<AddItemPage> {
     );
     newItemDescController.clear();
     newItemAmountController.clear();
+    // update user split
+    for (var i = 0; i < userIds.length; i++) {
+      updateSplitPayment(
+          userIds[i], currId, double.parse(splitAmountControllers[i].text));
+    }
+    splitAmountControllers.clear;
+    // update user temp
+
+    generateNewId(currId);
+
     // TODO: navigate to list page
   }
 
@@ -135,11 +285,21 @@ class _AddItemPageState extends State<AddItemPage> {
   void dispose() {
     newItemDescController.dispose();
     newItemAmountController.dispose();
+    for (var controller in splitAmountControllers) {
+      controller.dispose();
+    }
+    for (var controller in tempAmountControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   void initState() {
+    generateNewSplitControllers(userIds.length);
+    generateNewTempControllers(userIds.length);
+    selectedType = types.first;
+    selectedSplit = SplitOptions.equal;
     getBudgetNames();
     getProjectNames();
     super.initState();
@@ -162,7 +322,7 @@ class _AddItemPageState extends State<AddItemPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: 150,
+                  height: 160,
                   width: 300,
                   child: Column(
                     children: [
@@ -185,6 +345,13 @@ class _AddItemPageState extends State<AddItemPage> {
                                 border: UnderlineInputBorder(),
                                 hintText: 'amount',
                               ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              ],
                             ),
                           ),
                           // photo widget
@@ -212,17 +379,18 @@ class _AddItemPageState extends State<AddItemPage> {
                           SizedBox(
                             width: 200,
                             child: TextField(
-                              controller: newItemDescController,
+                              maxLength: 30,
+                              maxLines: 1,
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'desciption',
                               ),
+                              controller: newItemDescController,
                             ),
                           ),
                           Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.black38))),
+                            padding: const EdgeInsets.only(bottom: 10),
+                            height: 50,
                             child: CupertinoButton(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 5),
@@ -360,64 +528,16 @@ class _AddItemPageState extends State<AddItemPage> {
             // split prompt -> render if SplitOption.percent or SplitOption.exact
             // project/budget -> render if SplitOption.none
             _renderSplitPrompt(
+              _splitPayWidget(),
               Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 20),
+                margin: const EdgeInsets.only(top: 10),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 width: 310,
                 height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: const Color.fromARGB(255, 225, 208, 244),
-                ),
-                child: userIds.isNotEmpty
-                    ? Scrollbar(
-                        controller: splitScrollController,
-                        thumbVisibility: true,
-                        child: ListView.builder(
-                          primary: false,
-                          controller: splitScrollController,
-                          itemCount: userIds.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: const EdgeInsets.all(5),
-                              // color: colors[index],
-                              width: 300,
-                              height: 40,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    getUserName(userIds[index]),
-                                    style: defaultStyle,
-                                  ),
-                                  SizedBox(
-                                    width: 100,
-                                    height: 30,
-                                    child: TextField(
-                                      controller: splitAmountController,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : const Center(
-                        child: Text("don't split with yourself :p"),
-                      ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 20),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                width: 310,
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: const Color.fromARGB(255, 225, 208, 244),
+                  color: const Color.fromARGB(255, 229, 219, 240),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -455,20 +575,39 @@ class _AddItemPageState extends State<AddItemPage> {
                 ),
               ),
             ),
-            // Temp pay, similar to splitAmount Widget
+            // Temp pay option
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Text(
                   'Temp. pay',
                   style: defaultStyle,
                 ),
+                Transform.scale(
+                  scale: 0.9,
+                  child: Switch.adaptive(
+                    activeColor: Colors.purple[300],
+                    value: isTempPay,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          isTempPay = value;
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 20),
-
+            // Temp pay widget
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _tempPayWidget(isTempPay),
+              ],
+            ),
             // Save button
-            // TODO: store result to splitPayment on save
+            // TODO: store result to splitPayment & tempPayment on save
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
